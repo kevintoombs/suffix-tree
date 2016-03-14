@@ -1,6 +1,6 @@
 #include "includes.h"
 
-using namespace std;
+
 
 class Alphabet
 {
@@ -18,7 +18,7 @@ public:
 
 	Symbol *rootDelimiter;
 	Symbol *currentSymbol;
-	std::string aString;
+	string aString;
 
 	Alphabet()
 	{

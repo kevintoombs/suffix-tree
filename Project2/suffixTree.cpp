@@ -8,24 +8,24 @@ public:
 
 	Node *parent;
 	Node *sl;
-	std::vector<Node> children;
+	vector<Node> children;
 };
 
 class McSuffixTree
 {
 public:
 	Node *root;
-	std::string s;
+	string s;
 	Alphabet sigma;
 
-	McSuffixTree(std::string sIn, Alphabet aIn)
+	McSuffixTree(string sIn, Alphabet aIn)
 	{
 		McSuffixTree::sigma = aIn;
 		McSuffixTree::s = sIn + sigma.rootDelimiter->sym;
 
 		for (int i = 1; i <= McSuffixTree::s.length(); i++)
 		{
-			std::cout << i << ": " << McSuffixTree::suffi(i) << std::endl;
+			cout << i << ": " << McSuffixTree::suffi(i) << endl;
 		}
 	}
 
@@ -44,17 +44,17 @@ public:
 
 	}
 
-	std::string pathLabel(Node u)
+	string pathLabel(Node u)
 	{
 
 	}
 
-	std::string suffi(int i)
+	string suffi(int i)
 	{
 		return McSuffixTree::s.substr(i - 1);
 	}
 
-	void insert(std::string)
+	void insert(string)
 	{
 
 	}
