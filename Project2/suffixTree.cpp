@@ -20,12 +20,12 @@ public:
 
 	McSuffixTree(string sIn, Alphabet aIn)
 	{
-		McSuffixTree::sigma = aIn;
-		McSuffixTree::s = sIn + sigma.rootDelimiter->sym;
+		sigma = aIn;
+		s = sIn + sigma.rootDelimiter->sym;
 
-		for (int i = 1; i <= McSuffixTree::s.length(); i++)
+		for (unsigned int i = 1; i <= s.length(); i++)
 		{
-			cout << i << ": " << McSuffixTree::suffi(i) << endl;
+			cout << i << ": " << suffi(i) << endl;
 		}
 	}
 
@@ -51,7 +51,7 @@ public:
 
 	string suffi(int i)
 	{
-		return McSuffixTree::s.substr(i - 1);
+		return s.substr(i - 1);
 	}
 
 	void insert(string)
