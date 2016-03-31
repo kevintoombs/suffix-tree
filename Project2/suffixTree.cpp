@@ -9,6 +9,16 @@ public:
 	Node *parent;
 	Node *sl;
 	vector<Node> children;
+	
+	Node() {};
+	Node(int sI, int sD, int nD, Node *pP)
+	{
+		startIndex = sI;
+		stringDepth = sD;
+		nodeDepth = nD;
+		parent = pP;
+	}
+
 };
 
 class McSuffixTree
@@ -22,17 +32,18 @@ public:
 	{
 		sigma = aIn;
 		s = sIn + sigma.rootDelimiter->sym;
-		
-		init();
 
+		init();
 	}
 
 	void init()
 	{
-		//To <- make root node
+		root = new Node(0, 0, 0, root);
+		root->sl = root;
+
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
-			insert(suffi(i));
+			insert(suffix(i));
 		}
 	}
 
@@ -40,7 +51,7 @@ public:
 	{
 
 	}
-
+	
 	void printDFST()
 	{
 
@@ -48,7 +59,25 @@ public:
 
 	void FindPath(Node *v, std::string t)
 	{
+		//STEP 1
+			//TODO
+		//STEP 2
+		if (/*case1*/true)
+		{
 
+		}
+		else if (/*case1*/true)
+		{
+
+		}
+		else if (/*case1*/true)
+		{
+
+		}
+		else if (/*case1*/true)
+		{
+
+		}
 	}
 
 	string pathLabel(Node u)
@@ -56,16 +85,17 @@ public:
 
 	}
 
-	string suffi(int i)
+	string suffix(int i)
 	{
 		return s.substr(i - 1);
 	}
 
-	void insert(string t )
+	void insert(string t)
 	{
 		//DEBUG
 		cout << "Inserting: "<< t << endl;
 		//END DEBUG
+
 	}
 
 	//(SL(u)) && (u != root)
