@@ -2,8 +2,8 @@
 
 class Node {
 public:
-	int startIndex;
-	int stringDepth;
+	int startIndex; //where the string starts [1.....n]
+	int stringDepth; //where the string ends [1.....n]
 	int nodeDepth;
 
 	Node *parent;
@@ -19,7 +19,6 @@ public:
 		nodeDepth = nD;
 		parent = pP;
 	}
-
 };
 
 class McSuffixTree
@@ -130,11 +129,9 @@ public:
 
 	}
 
-	
 	//called to insert a string under a node by either adding a new terminal node, or breaking an edge and adding two node.
 	void insertNode(Node parent, int stringStart)
 	{
 			
 	}
-
 };
