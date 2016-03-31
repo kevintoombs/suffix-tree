@@ -8,7 +8,8 @@ public:
 
 	Node *parent;
 	Node *sl;
-	vector<Node> children;
+	Node *child;
+	Node *sibling;
 	
 	Node() {};
 	Node(int sI, int sD, int nD, Node *pP)
@@ -25,6 +26,7 @@ class McSuffixTree
 {
 public:
 	Node *root;
+	Node *u;
 	string s;
 	Alphabet sigma;
 
@@ -40,6 +42,7 @@ public:
 	{
 		root = new Node(0, 0, 0, root);
 		root->sl = root;
+		u = root->parent;
 
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
@@ -59,7 +62,6 @@ public:
 
 	void FindPath(Node *v, string t)
 	{
-		Node u = 
 		//STEP 1
 			//TODO
 		//STEP 2
@@ -126,6 +128,13 @@ public:
 	void nodeHops(Node vPrime, string beta)
 	{
 
+	}
+
+	
+	//called to insert a string under a node by either adding a new terminal node, or breaking an edge and adding two node.
+	void insertNode(Node parent, int stringStart)
+	{
+			
 	}
 
 };
