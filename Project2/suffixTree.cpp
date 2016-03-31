@@ -22,10 +22,17 @@ public:
 	{
 		sigma = aIn;
 		s = sIn + sigma.rootDelimiter->sym;
+		
+		init();
 
+	}
+
+	void init()
+	{
+		//To <- make root node
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
-			cout << i << ": " << suffi(i) << endl;
+			insert(suffi(i));
 		}
 	}
 
@@ -54,26 +61,32 @@ public:
 		return s.substr(i - 1);
 	}
 
-	void insert(string)
+	void insert(string t )
 	{
-
+		//DEBUG
+		cout << "Inserting: "<< t << endl;
+		//END DEBUG
 	}
 
+	//(SL(u)) && (u != root)
 	void case1a()
 	{
 
 	}
 
+	//(SL(u)) && (u == root)
 	void case1b()
 	{
 
 	}
 
+	//!(SL(u)) && (u != root)
 	void case2a()
 	{
 
 	}
 
+	//!(SL(u)) && (u == root)
 	void case2b()
 	{
 
