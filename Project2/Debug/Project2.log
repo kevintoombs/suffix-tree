@@ -1,11 +1,11 @@
-﻿Build started 3/14/2016 3:34:18 PM.
-     1>Project "C:\Users\guenw\Documents\gitrepos\Project2\Project2\Project2.vcxproj" on node 2 (Rebuild target(s)).
+﻿Build started 3/14/2016 3:37:35 PM.
+     1>Project "C:\Users\guenw\Documents\gitrepos\Project2\Project2\Project2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt genomics.cpp main.cpp suffixTree.cpp
          suffixTree.cpp
-     1>c:\users\guenw\documents\gitrepos\project2\project2\suffixtree.cpp(27): warning C4018: '<=': signed/unsigned mismatch
+     1>c:\users\guenw\documents\gitrepos\project2\project2\suffixtree.cpp(26): warning C4018: '<=': signed/unsigned mismatch
          main.cpp
-     1>c:\users\guenw\documents\gitrepos\project2\project2\suffixtree.cpp(27): warning C4018: '<=': signed/unsigned mismatch
+     1>c:\users\guenw\documents\gitrepos\project2\project2\suffixtree.cpp(26): warning C4018: '<=': signed/unsigned mismatch
          genomics.cpp
          Generating Code...
        Link:
@@ -13,8 +13,8 @@
          Debug\main.obj
          Debug\suffixTree.obj
          Project2.vcxproj -> C:\Users\guenw\Documents\gitrepos\Project2\Debug\Project2.exe
-     1>Done Building Project "C:\Users\guenw\Documents\gitrepos\Project2\Project2\Project2.vcxproj" (Rebuild target(s)).
+     1>Done Building Project "C:\Users\guenw\Documents\gitrepos\Project2\Project2\Project2.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.15
+Time Elapsed 00:00:02.69
