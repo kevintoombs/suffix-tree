@@ -43,7 +43,7 @@ public:
 
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
-			insert(suffix(i));
+			insertString(suffix(i));
 		}
 	}
 
@@ -57,24 +57,25 @@ public:
 
 	}
 
-	void FindPath(Node *v, std::string t)
+	void FindPath(Node *v, string t)
 	{
+		Node u = 
 		//STEP 1
 			//TODO
 		//STEP 2
-		if (/*case1*/true)
+		if (true) //case1a (SL(u)) && (u != root) 
 		{
 
 		}
-		else if (/*case1*/true)
+		else if (true) //case1b (SL(u)) && (u == root)
 		{
 
 		}
-		else if (/*case1*/true)
+		else if (true) //case2a !(SL(u)) && (u != root)
 		{
 
 		}
-		else if (/*case1*/true)
+		else if (true) //case2b !(SL(u)) && (u == root)
 		{
 
 		}
@@ -90,7 +91,7 @@ public:
 		return s.substr(i - 1);
 	}
 
-	void insert(string t)
+	void insertString(string t)
 	{
 		//DEBUG
 		cout << "Inserting: "<< t << endl;
@@ -118,6 +119,11 @@ public:
 
 	//!(SL(u)) && (u == root)
 	void case2b()
+	{
+
+	}
+
+	void nodeHops(Node vPrime, string beta)
 	{
 
 	}
