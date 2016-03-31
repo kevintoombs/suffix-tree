@@ -7,17 +7,16 @@ public:
 	int nodeDepth;
 
 	Node *parent;
-	Node *sl;
+	Node *sL;
 	Node *child;
 	Node *sibling;
 	
 	Node() {};
-	Node(int sI, int sD, int nD, Node *pP)
+	Node(int sI, int sD, int nD)
 	{
 		startIndex = sI;
 		stringDepth = sD;
 		nodeDepth = nD;
-		parent = pP;
 	}
 };
 
@@ -39,13 +38,15 @@ public:
 
 	void init()
 	{
-		root = new Node(0, 0, 0, root);
-		root->sl = root;
+		root = new Node(0, 0, 0);
+		root->parent = root;
+		root->sL = root;
 		u = root->parent;
 
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
-			insertString(suffix(i));
+			insertSuffix(i);
+			//insertString(suffix(i));
 		}
 	}
 
@@ -61,25 +62,12 @@ public:
 
 	void FindPath(Node *v, string t)
 	{
-		//STEP 1
-			//TODO
-		//STEP 2
-		if (true) //case1a (SL(u)) && (u != root) 
-		{
 
-		}
-		else if (true) //case1b (SL(u)) && (u == root)
-		{
+	}
 
-		}
-		else if (true) //case2a !(SL(u)) && (u != root)
-		{
+	void findPath(Node *v, int t)
+	{
 
-		}
-		else if (true) //case2b !(SL(u)) && (u == root)
-		{
-
-		}
 	}
 
 	string pathLabel(Node u)
@@ -99,6 +87,31 @@ public:
 		//END DEBUG
 
 	}
+	void insertSuffix(int i)
+	{
+		//DEBUG
+		cout << "Inserting by index: " << s.substr(i-1) << endl;
+		//END DEBUG
+		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
+		{
+			cout << "case 1a called." << endl;
+		}
+		else if (u->sL && (u == root)) //case1b (SL(u)) && (u == root)
+		{
+			cout << "case 1b called." << endl;
+			case1b(i);
+		}
+		else if (!(u->sL) && (u != root)) //case2a !(SL(u)) && (u != root)
+		{
+			cout << "case 2a called." << endl;
+
+		}
+		else if (!(u->sL) && (u == root)) //case2b !(SL(u)) && (u == root)
+		{
+			cout << "case 2b called." << endl;
+		}
+
+	}
 
 	//(SL(u)) && (u != root)
 	void case1a()
@@ -107,9 +120,10 @@ public:
 	}
 
 	//(SL(u)) && (u == root)
-	void case1b()
+	void case1b(int i)
 	{
-
+		//FindPath(root, suffix(i));
+		findPath(root, i);
 	}
 
 	//!(SL(u)) && (u != root)
