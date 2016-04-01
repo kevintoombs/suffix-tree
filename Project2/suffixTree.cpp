@@ -281,12 +281,16 @@ public:
 		else
 			v->child = Ui;
 		vChild->parent = Ui;
+
+		//handle the case where the child being replaced has a sibling pointer
 		if (vChild->sibling != NULL)
 		{
 			Ui->sibling = vChild->sibling;
 			vChild->sibling = NULL;
-			vChild->nodeDepth++;
 		}
-
+		//replaced child's node depth increases by 1
+		vChild->nodeDepth++;
+		//set previous child's start index to the last character of Ui + 1
+		vChild->startIndex = Ui->stringDepth+1;
 	}
 };
