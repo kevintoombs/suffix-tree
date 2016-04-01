@@ -75,11 +75,12 @@ public:
 	void findPath(Node *v, int t)
 	{
 		Node *n = v->child;
+		Node *lastN = NULL;
 
 		while (n != NULL)
 		{
-			if (s[n->startIndex-1] == s[t - 1])
-			{	
+			if (s[n->startIndex - 1] == s[t - 1])
+			{
 				int i = 1;
 				while ((s[n->startIndex - 1 + i] == s[t - 1 + i]) && (i < n->stringDepth - n->startIndex))
 				{
@@ -89,16 +90,20 @@ public:
 				{
 					v = n;
 					n = v->child;
+
 				}
 				else
 				{
-					cout << "break";
-					printf("break called with i = %i", i);
+					printf("===!!!!===break called with i = %i\n", i);
+					edgeBreak(v, n, lastN, i);
 					return;
 				}
 			}
 			else
+			{
+				lastN = n;
 				n = n->sibling;
+			}
 		}
 		
 		//if there is no matching child, insert one!
@@ -140,6 +145,7 @@ public:
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
 		{
 			cout << "case 1a called for suffix " << i << "." << endl;
+
 		}
 		else if (u->sL && (u == root)) //case1b (SL(u)) && (u == root)
 		{
@@ -158,9 +164,9 @@ public:
 	}
 
 	//(SL(u)) && (u != root)
-	void case1a()
+	void case1a(Node v, int i)
 	{
-
+		findPath(root, i);
 	}
 
 	//(SL(u)) && (u == root)
@@ -281,7 +287,6 @@ public:
 			vChild->sibling = NULL;
 			vChild->nodeDepth++;
 		}
-
 
 	}
 };
