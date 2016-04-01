@@ -292,6 +292,7 @@ public:
 		}
 		//replaced child's node depth increases by 1
 		vChild->nodeDepth++;
+		vChild->stringDepth -= correctComparisons;
 		//set previous child's start index to the last character of Ui + 1
 
 		vChild->startIndex = Ui->startIndex + Ui->stringDepth;
