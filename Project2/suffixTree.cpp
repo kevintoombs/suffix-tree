@@ -132,11 +132,11 @@ public:
 			cout << "case 1b called for suffix " << i << "." << endl;
 			case1b(i);
 		}
-		else if (!(u->sL) && (u != root)) //case2a !(SL(u)) && (u != root)
+		else if (!(u->sL) && (u->parent != root)) //case2a !(SL(u)) && (u != root)
 		{
 			cout << "case 2a called for suffix " << i << "." << endl;
 		}
-		else if (!(u->sL) && (u == root)) //case2b !(SL(u)) && (u == root)
+		else if (!(u->sL) && (u->parent == root)) //case2b !(SL(u)) && (u == root)
 		{
 			cout << "case 2b called for suffix " << i << "." << endl;
 		}
