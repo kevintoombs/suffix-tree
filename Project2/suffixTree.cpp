@@ -3,7 +3,7 @@
 class Node {
 public:
 	int startIndex = 0; //where the string starts [1.....n]
-	int stringDepth = 0; //where the string ends when added to  startIndex [1.....n]
+	int stringSize = 0; //where the string ends when added to  startIndex [1.....n]
 	int nodeDepth = 0;
 
 	Node *parent = NULL;
@@ -15,13 +15,13 @@ public:
 	Node(int sI, int sD, int nD)
 	{
 		startIndex = sI;
-		stringDepth = sD;
+		stringSize = sD;
 		nodeDepth = nD;
 	}
-	Node(int sI, int sD, int nD, Node *pP)
+	Node(int sI, int sS, int nD, Node *pP)
 	{
 		startIndex = sI;
-		stringDepth = sD;
+		stringSize = sS;
 		nodeDepth = nD;
 		parent = pP;
 	}
@@ -53,21 +53,43 @@ public:
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
 			insertSuffix(i);
-			//insertString(suffix(i));
+			displayAllChildren(root);
+			__noop;
 		}
+	}
+
+	void displayAllChildren(Node *u)
+	{
+		Node *child = u->child;
+		
+		cout << "[";
+		while (child != NULL)
+		{
+			cout << "(" << child->startIndex << "," << child->stringSize << ")";
+			child = child->sibling;
+		}
+		cout << "]" << endl;
+
+		child = u->child;
+		while (child != NULL)
+		{
+			displayAllChildren(child);
+			child = child->sibling;
+		}
+		
 	}
 
 	void displayChildren(Node *u)
 	{
-
+		Node *child = u->child;
+		while (child != NULL) 
+		{
+			cout << child->startIndex << "," << child->stringSize << endl;
+			child = child->sibling;
+		}
 	}
 	
 	void printDFST()
-	{
-
-	}
-
-	void FindPath(Node *v, string t)
 	{
 
 	}
@@ -84,12 +106,12 @@ public:
 			if (s[n->startIndex - 1] == s[t - 1])
 			{
 				int i = 1;
-				while ((s[n->startIndex - 1 + i] == s[t - 1 + i]) && (i < n->stringDepth - n->startIndex))
+				while ((s[n->startIndex - 1 + i] == s[t - 1 + i]) && (i < n->stringSize - n->startIndex))
 				{
 					i++;
 				}
 
-				if (i == n->stringDepth)
+				if (i == n->stringSize)
 				{
 					v = n;
 					n = v->child;
@@ -98,7 +120,7 @@ public:
 				else
 				{
 					printf("===!!!!===break called with i = %i\n", i);
-					edgeBreak(v, n, lastN, i, t+sumI+i);
+					findPath(edgeBreak(v, n, lastN, i), t + sumI + i);
 
 					return;
 				}
@@ -126,19 +148,6 @@ public:
 		if (&u == root)
 			return "";
 		return s.substr(temp->startIndex, u.startIndex);
-	}
-
-	string suffix(int i)
-	{
-		return s.substr(i - 1);
-	}
-
-	void insertString(string t)
-	{
-		//DEBUG
-		cout << "Inserting: "<< t << endl;
-		//END DEBUG
-
 	}
 
 	void insertSuffix(int i)
@@ -188,9 +197,9 @@ public:
 	{
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
-		nodeHops(*vPrime, u->startIndex, u->stringDepth);
+		nodeHops(vPrime, u->startIndex+1, u->stringSize-1);
 		Node *v = u->sL;
-		findPath(v, i + u->stringDepth);
+		findPath(v, i + u->stringSize);
 	}
 
 	//!(SL(u)) && (u' == root)
@@ -198,40 +207,63 @@ public:
 	{
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
-		nodeHops(*vPrime,  u->startIndex, u->stringDepth);
+		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);
 		Node *v = u->sL;
-		findPath(v, i+u->stringDepth);
+		findPath(v, i+u->stringSize-1);
 	}
 
-	void nodeHops(Node vPrime, int betaStart, int betaLength)
+	void nodeHops(Node* vPrime, int betaStart, int betaLength)
 	{
-		Node* child = vPrime.child;
-		//begin node hop, stopping when we are at the endpoint, or will insert on an edge
-		while (betaLength >= (child->startIndex - vPrime.startIndex) && betaLength > 0)
+		if (betaLength == 0)
 		{
-			
+			u->sL = root;
+			return;
+		}
+		Node* child = vPrime->child;
+		Node* parent = child->parent;
+		Node* prevSibling = NULL;
+		bool b = true;
+		//begin node hop, stopping when we are at the endpoint, or will insert on an edge
+		while (/*betaLength >= (child->stringSize)*/b && betaLength > 0)
+		{
+			parent = child->parent;
+			prevSibling = NULL;
 			while (s[child->startIndex-1] != s[betaStart-1])
 			{
+				prevSibling = child;
 				child = child->sibling;
+				
 			}
-			betaLength -= child->startIndex - vPrime.startIndex;
-			betaStart += child->startIndex - vPrime.startIndex;
-			//at this point we have the right child
-			vPrime = *child;
-			child = vPrime.child;
+
+			if (betaLength < (child->stringSize))
+			{
+				b = false;
+			}
+			else 
+			{
+				betaLength -= child->stringSize;
+				betaStart += child->stringSize;
+				//at this point we have the right child
+
+				
+				child = child->child;
+			}
 		}
+
 		//mid-edge insertion
 		if (betaLength > 0)
 		{
 			//NEED TO INSERT FIND PATH HERE WITH SPECIAL
-			//edgeBreak(vPrime, child, lastN, i, t + sumI + i); //TODO
-			u->sL = child;
+			Node* v= edgeBreak(parent, child, prevSibling, betaLength);
+
+			u->sL =v; //TODO
+			//u->sL = child;
 		}
 		//endpoint insertion
 		else
 		{
-			//findPath(child, betaStart);
 			u->sL = child;
+			//findPath(child, betaStart);
 		}
 	}
 
@@ -241,7 +273,7 @@ public:
 		cout << "Making node for index " << stringStart << ".\n";
 		
 		Node *child = parent->child;
-
+			
 		//if parent has no children...
 		if (child == NULL)
 		{
@@ -254,7 +286,7 @@ public:
 		{
 			while (child != NULL)
 			{
-				cout << ".";
+				//cout << ".";
 				//if we get a matching child
 				if (s[stringStart-1] == s[child->startIndex-1])
 				{
@@ -284,13 +316,14 @@ public:
 		//when we insert child j, child j's sibling pointer points to child i, and child i's sibling pointer is what j's used to be 
 
 
-			//this is always the final function call, now we set the next u and repeat.
+		//this is always the final function call, now we set the next u and repeat.
 		exit(1);
 		return;
 	}
 
-	void edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons, int t)
+	Node* edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
 	{
+		printf("===!!!!===break called\n");
 		Node* Ui = new Node(vChild->startIndex, correctComparisons, vChild->nodeDepth, v);
 		Ui->child = vChild;
 		//if vChild is not v's first child
@@ -309,12 +342,12 @@ public:
 		}
 		//replaced child's node depth increases by 1
 		vChild->nodeDepth++;
-		vChild->stringDepth -= correctComparisons;
+		vChild->stringSize -= correctComparisons;
 		//set previous child's start index to the last character of Ui + 1
 
-		vChild->startIndex = Ui->startIndex + Ui->stringDepth;
-		if (u != root) u->sL = Ui;
-		insertNode(Ui, t);
+		vChild->startIndex = Ui->startIndex + Ui->stringSize;
+		//if (u->sL == NULL) u->sL = Ui;
+		return Ui;
 	}
 
 	void BWT()
