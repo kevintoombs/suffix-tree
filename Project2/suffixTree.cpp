@@ -2,14 +2,14 @@
 
 class Node {
 public:
-	int startIndex; //where the string starts [1.....n]
-	int stringDepth; //where the string ends [1.....n]
-	int nodeDepth;
+	int startIndex = 0; //where the string starts [1.....n]
+	int stringDepth = 0; //where the string ends [1.....n]
+	int nodeDepth = 0;
 
-	Node *parent;
-	Node *sL;
-	Node *child;
-	Node *sibling;
+	Node *parent = NULL;
+	Node *sL = NULL;
+	Node *child = NULL;
+	Node *sibling = NULL;
 	
 	Node() {};
 	Node(int sI, int sD, int nD)
@@ -17,6 +17,13 @@ public:
 		startIndex = sI;
 		stringDepth = sD;
 		nodeDepth = nD;
+	}
+	Node(int sI, int sD, int nD, Node *pP)
+	{
+		startIndex = sI;
+		stringDepth = sD;
+		nodeDepth = nD;
+		parent = pP;
 	}
 };
 
@@ -67,7 +74,21 @@ public:
 
 	void findPath(Node *v, int t)
 	{
+		Node *n = v->child;
 
+		while (n != NULL)
+		{
+			if (s[n->startIndex] == s[t - 1])
+			{
+				//if a child node matches....
+				//todo
+			}
+			else
+				n = n->sibling;
+		}
+		
+		//if there is no matching child, insert one!
+		insertNode(v, t);
 	}
 
 	string pathLabel(Node u)
@@ -87,6 +108,7 @@ public:
 		//END DEBUG
 
 	}
+
 	void insertSuffix(int i)
 	{
 		//DEBUG
@@ -94,21 +116,20 @@ public:
 		//END DEBUG
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
 		{
-			cout << "case 1a called." << endl;
+			cout << "case 1a called for suffix " << i << "." << endl;
 		}
 		else if (u->sL && (u == root)) //case1b (SL(u)) && (u == root)
 		{
-			cout << "case 1b called." << endl;
+			cout << "case 1b called for suffix " << i << "." << endl;
 			case1b(i);
 		}
 		else if (!(u->sL) && (u != root)) //case2a !(SL(u)) && (u != root)
 		{
-			cout << "case 2a called." << endl;
-
+			cout << "case 2a called for suffix " << i << "." << endl;
 		}
 		else if (!(u->sL) && (u == root)) //case2b !(SL(u)) && (u == root)
 		{
-			cout << "case 2b called." << endl;
+			cout << "case 2b called for suffix " << i << "." << endl;
 		}
 
 	}
@@ -143,9 +164,23 @@ public:
 
 	}
 
-	//called to insert a string under a node by either adding a new terminal node, or breaking an edge and adding two node.
-	void insertNode(Node parent, int stringStart)
+	//called to insert a string under a node by either adding a new terminal node, or breaking an edge and adding two nodes.
+	void insertNode(Node *parent, int stringStart)
 	{
-			
+		cout << "Making node for index " << stringStart << ".\n";
+		
+		//if parent has no children...
+		if (parent->child == NULL)
+		{
+			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1);
+		}
+
+
+		return;
+		//make new node
+		//find correct spot in children chain for it lexographically .. 
+		//we have children 1...i,j...n
+		//child i is the one we want to insert, child j is the next.
+		//when we insert child i, child i-1's sib
 	}
 };
