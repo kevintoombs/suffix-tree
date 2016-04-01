@@ -85,9 +85,17 @@ public:
 				{
 					i++;
 				}
-				cout << "break";
-				printf("break called with i = %i", i);
-				return;
+				if (i == n->stringDepth - n->startIndex)
+				{
+					v = n;
+					n = v->child;
+				}
+				else
+				{
+					cout << "break";
+					printf("break called with i = %i", i);
+					return;
+				}
 			}
 			else
 				n = n->sibling;
