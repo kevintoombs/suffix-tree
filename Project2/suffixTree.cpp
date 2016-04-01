@@ -99,10 +99,9 @@ public:
 		{
 			temp = temp->parent;
 		}
-		if (temp == root)
+		if (&u == root)
 			return "";
-
-		return s.substr(temp->startIndex, (u.stringDepth - temp->startIndex));
+		return s.substr(temp->startIndex, u.startIndex);
 	}
 
 	string suffix(int i)
@@ -168,9 +167,32 @@ public:
 
 	}
 
-	void nodeHops(Node vPrime, string beta)
+	void nodeHops(Node vPrime, int betaStart, int betaLength)
 	{
-
+		Node* child = vPrime.child;
+		//begin node hop, stopping when we are at the endpoint, or will insert on an edge
+		while (betaLength >= (child->startIndex - vPrime.startIndex) && betaLength > 0)
+		{
+			betaLength -= child->startIndex - vPrime.startIndex;
+			betaStart += child->startIndex - vPrime.startIndex;
+			while (s[child->startIndex] != s[vPrime.startIndex])
+			{
+				child = child->sibling;
+			}
+			//at this point we have the right child
+			vPrime = *child;
+			child = vPrime.child;
+		}
+		//mid-edge insertion
+		if (betaLength > 0)
+		{
+			//NEED TO INSERT FIND PATH HERE WITH SPECIAL
+		}
+		//endpoint insertion
+		else
+		{
+			findPath(child, betaStart);
+		}
 	}
 
 	//called to insert a string under a node by either adding a new terminal node, or breaking an edge and adding two nodes.
@@ -209,5 +231,26 @@ public:
 		//this is always the final function call, now we set the next u and repeat.
 		u = parent;
 		return;
+	}
+
+	void edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
+	{
+		Node* Ui = new Node(v->stringDepth, (v->stringDepth+correctComparisons), (v->nodeDepth + 1), v);
+		Ui->child = vChild;
+		//if vChild is not v's first child
+		if (vSibling != NULL)
+			vSibling->sibling = Ui;
+		//if vChild IS v's first child
+		else
+			v->child = Ui;
+		vChild->parent = Ui;
+		if (vChild->sibling != NULL)
+		{
+			Ui->sibling = vChild->sibling;
+			vChild->sibling = NULL;
+			vChild->nodeDepth++;
+		}
+
+
 	}
 };
