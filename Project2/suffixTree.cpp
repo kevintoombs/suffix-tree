@@ -272,7 +272,7 @@ public:
 
 	void edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
 	{
-		Node* Ui = new Node(v->stringDepth, (v->stringDepth+correctComparisons), (v->nodeDepth + 1), v);
+		Node* Ui = new Node(v->startIndex + v->stringDepth, (v->startIndex + v->stringDepth+correctComparisons), (v->nodeDepth + 1), v);
 		Ui->child = vChild;
 		//if vChild is not v's first child
 		if (vSibling != NULL)
@@ -291,6 +291,8 @@ public:
 		//replaced child's node depth increases by 1
 		vChild->nodeDepth++;
 		//set previous child's start index to the last character of Ui + 1
-		vChild->startIndex = Ui->stringDepth+1;
+		vChild->startIndex = Ui->startIndex + Ui->stringDepth+1;
+
+
 	}
 };
