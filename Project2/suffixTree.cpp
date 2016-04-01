@@ -174,13 +174,31 @@ public:
 		{
 			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1);
 		}
+		//otherwise loop through children
+		else
+		{
+			Node *child = parent->child;
+			while (child != NULL)
+			{
+				//if we get a matching child
+				if (s[stringStart-1] == s[child->startIndex-1])
+				{
+
+				}
 
 
-		return;
+				child = child->sibling;
+			}
+		}
 		//make new node
 		//find correct spot in children chain for it lexographically .. 
 		//we have children 1...i,j...n
-		//child i is the one we want to insert, child j is the next.
-		//when we insert child i, child i-1's sib
+		//child j is the one we want to insert, child i is the previous.
+		//when we insert child j, child j's sibling pointer points to child i, and child i's sibling pointer is what j's used to be 
+
+
+		//this is always the final function call, now we set the next u and repeat.
+		u = parent;
+		return;
 	}
 };
