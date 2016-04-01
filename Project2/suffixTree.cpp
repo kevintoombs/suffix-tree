@@ -88,7 +88,8 @@ public:
 				{
 					i++;
 				}
-				if (i == n->stringDepth - n->startIndex)
+
+				if (i == n->stringDepth)
 				{
 					v = n;
 					n = v->child;
@@ -98,6 +99,7 @@ public:
 				{
 					printf("===!!!!===break called with i = %i\n", i);
 					edgeBreak(v, n, lastN, i, t+sumI+i);
+
 					return;
 				}
 			}
@@ -147,49 +149,58 @@ public:
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
 		{
 			cout << "case 1a called for suffix " << i << "." << endl;
-			case1a(u->sL, i);
+			case1a(u, i);
 		}
 		else if (u->sL && (u == root)) //case1b (SL(u)) && (u == root)
 		{
 			cout << "case 1b called for suffix " << i << "." << endl;
-			case1b(i);
+			case1b(u, i);
 		}
 		else if (!(u->sL) && (u->parent != root)) //case2a !(SL(u)) && (u != root)
 		{
 			cout << "case 2a called for suffix " << i << "." << endl;
-			case2a(u->parent->sL, i);
+			case2a(u, i);
 		}
 		else if (!(u->sL) && (u->parent == root)) //case2b !(SL(u)) && (u == root)
 		{
 			cout << "case 2b called for suffix " << i << "." << endl;
-			case2b(u->parent->sL, i);
+			case2b(u, i);
 		}
 
 	}
 
 	//(SL(u)) && (u != root)
-	void case1a(Node *v, int i)
+	void case1a(Node *u, int i)
 	{
+		Node *v = u->sL;
 		findPath(v, i);
 	}
 
 	//(SL(u)) && (u == root)
-	void case1b(int i)
+	void case1b(Node *u, int i)
 	{
-		//FindPath(root, suffi
-		findPath(root, i);
+		Node *v = u->sL;
+		findPath(v, i);
 	}
 
-	//!(SL(u)) && (u != root)
-	void case2a(Node *v, int i)
+	//!(SL(u)) && (u' != root)
+	void case2a(Node *u, int i)
 	{
-
+		Node *uPrime = u->parent;
+		Node *vPrime = uPrime->sL;
+		nodeHops(*vPrime, u->startIndex, u->stringDepth);
+		Node *v = u->sL;
+		findPath(v, i + u->stringDepth);
 	}
 
-	//!(SL(u)) && (u == root)
-	void case2b(Node *v, int i)
+	//!(SL(u)) && (u' == root)
+	void case2b(Node *u, int i)
 	{
-
+		Node *uPrime = u->parent;
+		Node *vPrime = uPrime->sL;
+		nodeHops(*vPrime,  u->startIndex, u->stringDepth);
+		Node *v = u->sL;
+		findPath(v, i+u->stringDepth);
 	}
 
 	void nodeHops(Node vPrime, int betaStart, int betaLength)
@@ -198,12 +209,13 @@ public:
 		//begin node hop, stopping when we are at the endpoint, or will insert on an edge
 		while (betaLength >= (child->startIndex - vPrime.startIndex) && betaLength > 0)
 		{
-			betaLength -= child->startIndex - vPrime.startIndex;
-			betaStart += child->startIndex - vPrime.startIndex;
-			while (s[child->startIndex] != s[vPrime.startIndex])
+			
+			while (s[child->startIndex-1] != s[betaStart-1])
 			{
 				child = child->sibling;
 			}
+			betaLength -= child->startIndex - vPrime.startIndex;
+			betaStart += child->startIndex - vPrime.startIndex;
 			//at this point we have the right child
 			vPrime = *child;
 			child = vPrime.child;
@@ -212,11 +224,14 @@ public:
 		if (betaLength > 0)
 		{
 			//NEED TO INSERT FIND PATH HERE WITH SPECIAL
+			//edgeBreak(vPrime, child, lastN, i, t + sumI + i); //TODO
+			u->sL = child;
 		}
 		//endpoint insertion
 		else
 		{
-			findPath(child, betaStart);
+			//findPath(child, betaStart);
+			u->sL = child;
 		}
 	}
 
@@ -269,7 +284,7 @@ public:
 		//when we insert child j, child j's sibling pointer points to child i, and child i's sibling pointer is what j's used to be 
 
 
-		//this is always the final function call, now we set the next u and repeat.
+			//this is always the final function call, now we set the next u and repeat.
 		exit(1);
 		return;
 	}
@@ -298,7 +313,7 @@ public:
 		//set previous child's start index to the last character of Ui + 1
 
 		vChild->startIndex = Ui->startIndex + Ui->stringDepth;
-		u->sL = Ui;
+		if (u != root) u->sL = Ui;
 		insertNode(Ui, t);
 	}
 
