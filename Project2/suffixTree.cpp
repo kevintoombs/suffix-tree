@@ -93,7 +93,16 @@ public:
 
 	string pathLabel(Node u)
 	{
+		Node* temp;
+		temp = u.parent;
+		while (temp->parent != root)
+		{
+			temp = temp->parent;
+		}
+		if (temp == root)
+			return "";
 
+		return s.substr(temp->startIndex, (u.stringDepth - temp->startIndex));
 	}
 
 	string suffix(int i)
