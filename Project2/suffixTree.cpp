@@ -147,7 +147,7 @@ public:
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
 		{
 			cout << "case 1a called for suffix " << i << "." << endl;
-
+			case1a(u->sL, i);
 		}
 		else if (u->sL && (u == root)) //case1b (SL(u)) && (u == root)
 		{
@@ -157,35 +157,37 @@ public:
 		else if (!(u->sL) && (u->parent != root)) //case2a !(SL(u)) && (u != root)
 		{
 			cout << "case 2a called for suffix " << i << "." << endl;
+			case2a(u->parent->sL, i);
 		}
 		else if (!(u->sL) && (u->parent == root)) //case2b !(SL(u)) && (u == root)
 		{
 			cout << "case 2b called for suffix " << i << "." << endl;
+			case2b(u->parent->sL, i);
 		}
 
 	}
 
 	//(SL(u)) && (u != root)
-	void case1a(Node v, int i)
+	void case1a(Node *v, int i)
 	{
-		findPath(root, i);
+		findPath(v, i);
 	}
 
 	//(SL(u)) && (u == root)
 	void case1b(int i)
 	{
-		//FindPath(root, suffix(i));
+		//FindPath(root, suffi
 		findPath(root, i);
 	}
 
 	//!(SL(u)) && (u != root)
-	void case2a()
+	void case2a(Node *v, int i)
 	{
 
 	}
 
 	//!(SL(u)) && (u == root)
-	void case2b()
+	void case2b(Node *v, int i)
 	{
 
 	}
