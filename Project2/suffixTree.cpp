@@ -2,9 +2,11 @@
 
 class Node {
 public:
-	int startIndex;
-	int stringDepth;
-	int nodeDepth;
+	unsigned int startIndex;
+	unsigned int stringDepth;
+	unsigned int nodeDepth;
+
+	char startChar;
 
 	Node *parent;
 	Node *sl;

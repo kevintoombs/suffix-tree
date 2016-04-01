@@ -1,7 +1,5 @@
 #include "includes.h"
 
-
-
 class Alphabet
 {
 public:
