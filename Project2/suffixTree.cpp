@@ -78,16 +78,23 @@ public:
 
 		while (n != NULL)
 		{
-			if (s[n->startIndex] == s[t - 1])
-			{
-				//if a child node matches....
-				//todo
+			if (s[n->startIndex-1] == s[t - 1])
+			{	
+				int i = 1;
+				while ((s[n->startIndex - 1 + i] == s[t - 1 + i]) && (i < n->stringDepth - n->startIndex))
+				{
+					i++;
+				}
+				cout << "break";
+				printf("break called with i = %i", i);
+				return;
 			}
 			else
 				n = n->sibling;
 		}
 		
 		//if there is no matching child, insert one!
+		//or lets use this no matter what
 		insertNode(v, t);
 	}
 
@@ -173,32 +180,48 @@ public:
 
 	}
 
-	//called to insert a string under a node by either adding a new terminal node, or breaking an edge and adding two nodes.
+	//called to insert a string under a node by adding a new terminal node.
 	void insertNode(Node *parent, int stringStart)
 	{
 		cout << "Making node for index " << stringStart << ".\n";
 		
+		Node *child = parent->child;
+
 		//if parent has no children...
-		if (parent->child == NULL)
+		if (child == NULL)
 		{
-			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1);
+			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1, parent);
+			u = parent;
+			return;
 		}
 		//otherwise loop through children
 		else
 		{
-			Node *child = parent->child;
 			while (child != NULL)
 			{
+				cout << ".";
 				//if we get a matching child
 				if (s[stringStart-1] == s[child->startIndex-1])
 				{
-
+					//should never happen
+					exit(2);
 				}
-
-
-				child = child->sibling;
+				else
+				{
+					if (child->sibling == NULL)
+					{
+						child->sibling = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+						u = parent;
+						return;
+					}
+					else
+					{
+						child = child->sibling;
+					}
+				}
 			}
 		}
+
 		//make new node
 		//find correct spot in children chain for it lexographically .. 
 		//we have children 1...i,j...n
@@ -207,7 +230,7 @@ public:
 
 
 		//this is always the final function call, now we set the next u and repeat.
-		u = parent;
+		exit(1);
 		return;
 	}
 };
