@@ -294,9 +294,34 @@ public:
 		}
 		//replaced child's node depth increases by 1
 		vChild->nodeDepth++;
+		vChild->stringDepth -= correctComparisons;
 		//set previous child's start index to the last character of Ui + 1
 
 		vChild->startIndex = Ui->startIndex + Ui->stringDepth;
+		u->sL = Ui;
 		insertNode(Ui, t);
+	}
+
+	void BWT()
+	{
+
+	}
+	void BWTHelper(Node* node, vector<int>* bwtArray)
+	{
+		if (node == NULL)
+			return;
+		if (node->child == NULL)
+		{
+			bwtArray->push_back(node->startIndex);
+			return;
+		}
+		else
+		{
+			BWTHelper(node->child, bwtArray);
+		}
+		if (node->sibling != NULL)
+			BWTHelper(node->sibling, bwtArray);
+		return;
+		
 	}
 };
