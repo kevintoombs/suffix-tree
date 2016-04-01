@@ -3,7 +3,7 @@
 class Node {
 public:
 	int startIndex = 0; //where the string starts [1.....n]
-	int stringDepth = 0; //where the string ends [1.....n]
+	int stringDepth = 0; //where the string ends when added to  startIndex [1.....n]
 	int nodeDepth = 0;
 
 	Node *parent = NULL;
@@ -77,6 +77,8 @@ public:
 		Node *n = v->child;
 		Node *lastN = NULL;
 
+		int sumI = 0;
+
 		while (n != NULL)
 		{
 			if (s[n->startIndex - 1] == s[t - 1])
@@ -90,12 +92,12 @@ public:
 				{
 					v = n;
 					n = v->child;
-
+					sumI += i;
 				}
 				else
 				{
 					printf("===!!!!===break called with i = %i\n", i);
-					edgeBreak(v, n, lastN, i);
+					edgeBreak(v, n, lastN, i, t+sumI+i);
 					return;
 				}
 			}
@@ -270,7 +272,7 @@ public:
 		return;
 	}
 
-	void edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
+	void edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons, int t)
 	{
 		Node* Ui = new Node(v->stringDepth, (v->stringDepth+correctComparisons), (v->nodeDepth + 1), v);
 		Ui->child = vChild;
@@ -292,5 +294,7 @@ public:
 		vChild->nodeDepth++;
 		//set previous child's start index to the last character of Ui + 1
 		vChild->startIndex = Ui->stringDepth+1;
+	
+		insertNode(Ui, t);
 	}
 };
