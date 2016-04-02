@@ -313,6 +313,7 @@ public:
 		if (DEBUG == 1) cout << "Making node for index " << stringStart << ".\n";
 		
 		Node *child = parent->child;
+		Node *prevChild = NULL;
 			
 		//if parent has no children...
 		if (child == NULL)
@@ -357,11 +358,12 @@ public:
 						{
 							Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
 							n->sibling = child->sibling;
-
+							prevChild->sibling = n;
 						}
 					}
 					else
 					{
+						prevChild = child;
 						child = child->sibling;
 					}
 				}
