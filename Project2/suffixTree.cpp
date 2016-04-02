@@ -37,7 +37,7 @@ public:
 	string s;
 	Alphabet sigma;
 
-	bool DEBUG = 1;
+	bool DEBUG = 0;
 
 	McSuffixTree(string sIn, Alphabet aIn)
 	{
@@ -140,9 +140,10 @@ public:
 				//set matches to 1 
 				int i = 1;
 				//check for more matches
-				while ((s[n->startIndex - 1 + i] == s[t - 1 + i]) && (i < n->stringSize - n->startIndex))
+				while ((s[n->startIndex - 1 + i] == s[t - 1 + i + sumI]) && (i < n->stringSize))
 				{
 					i++;
+					if (i == n->stringSize) break;
 				}
 
 				//if all characters matched
@@ -195,6 +196,7 @@ public:
 	void insertSuffix(int i)
 	{
 		//DEBUG
+		if (DEBUG == 0) cout << i << "/" << s.length() << endl;
 		if (DEBUG == 1) cout << "Inserting by index: " << s.substr(i-1) << endl;
 		//END DEBUG
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
@@ -224,7 +226,7 @@ public:
 	void case1a(Node *u, int i)
 	{
 		Node *v = u->sL;
-		findPath(v, i);
+		findPath(v, i + deep(u) - 1);
 	}
 
 	//(SL(u)) && (u == root)
@@ -237,21 +239,35 @@ public:
 	//!(SL(u)) && (u' != root)
 	void case2a(Node *u, int i)
  	{
+		int preBreakStringSize = u->stringSize;
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
 		nodeHops(vPrime, u->startIndex, u->stringSize);
 		Node *v = u->sL;
-		findPath(v, i + u->stringSize);
+		findPath(v, i + preBreakStringSize);
+	}
+
+	int deep(Node* n)
+	{
+		int i = 0;
+		while (n->stringSize != 0)
+		{
+			i += n->stringSize;
+			n = n->parent;
+		}
+
+		return i;
 	}
 
 	//!(SL(u)) && (u' == root)
 	void case2b(Node *u, int i)
 	{
+		int preBreakStringSize = u->stringSize;
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
 		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);	
 		Node *v = u->sL;
-		findPath(v, i+u->stringSize-1);
+		findPath(v, i+preBreakStringSize-1);
 	}
 
 	void nodeHops(Node* vPrime, int betaStart, int betaLength)
@@ -276,6 +292,7 @@ public:
 				child = child->sibling;
 			}
 
+
 			if (betaLength < (child->stringSize))
 			{
 				b = false;
@@ -286,8 +303,7 @@ public:
 				betaStart += child->stringSize;
 				//at this point we have the right child
 
-				
-				child = child->child;
+				if (betaLength > 0) child = child->child;
 			}
 		}
 
@@ -384,7 +400,7 @@ public:
 				else if (s[stringStart - 1] < s[child->startIndex - 1])
 				{
 					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
-					n->sibling = child->sibling;
+					n->sibling = child;
 					prevChild->sibling = n;
 					u = parent;
 					return;
