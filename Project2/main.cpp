@@ -11,10 +11,13 @@ int main(int argc, char *argv[])
 
 
 	unsigned int start = clock();
-
 	McSuffixTree mST(inputString, a);
-
 	std::cout << "Time taken in millisecs: " << clock() - start << endl;
+
+	//cout << mST.s << endl;
+	//mST.sigma.display();
+	//mST.BWT();
+
 
 	//mST.printDFST();
 

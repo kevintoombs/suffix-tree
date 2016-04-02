@@ -500,14 +500,21 @@ public:
 	{
 		vector<int> bwtArray;
 		BWTHelper(root, &bwtArray);
+		
 		vector<char> bwtResult;
 		unsigned int i;
+		cout << "[";
+		for (i = 0; i < bwtArray.size(); i++)
+		{
+			cout << bwtArray[i] << ", ";
+		}
+		cout << "]" << endl;
 		for (i = 0; i < bwtArray.size(); i++)
 		{
 			if (bwtArray[i] == 1)
 				bwtResult.push_back('$');
 			else
-				bwtResult.push_back(s[bwtArray[i]]);
+				bwtResult.push_back(s[bwtArray[i]-2]);
 		}
 		ofstream outfile;
 		outfile.open("outfile.txt");
@@ -522,17 +529,22 @@ public:
 			return;
 		if (node->child == NULL)
 		{
-			bwtArray->push_back(node->startIndex);
-			if (node->sibling != NULL)
-				BWTHelper(node->sibling, bwtArray);
+			int size = node->parent->stringSize + node->stringSize - 1;
+			Node* temp = node;
+			while (temp->parent->stringSize != 0)
+			{
+				temp = temp->parent;
+				size += temp->parent->stringSize;
+			}
+			bwtArray->push_back(7 - size);
+			BWTHelper(node->sibling, bwtArray);
 			return;
 		}
 		else
 		{
 			BWTHelper(node->child, bwtArray);
 		}
-		if (node->sibling != NULL)
-			BWTHelper(node->sibling, bwtArray);
+		BWTHelper(node->sibling, bwtArray);
 		return;
 	}
 
