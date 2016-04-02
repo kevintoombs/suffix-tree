@@ -108,9 +108,18 @@ public:
 		}
 	}
 	
-	void printDFST()
+	void printDFST(Node *node)
 	{
+		DFSTHelper(node);
+	}
 
+	void DFSTHelper(Node *node)
+	{
+		if (node == NULL)
+			return;
+		cout << node->startIndex + node->stringSize << endl;
+		DFSTHelper(node->child);
+		DFSTHelper(node->sibling);
 	}
 
 	void findPath(Node *v, int t)
@@ -456,6 +465,8 @@ public:
 		if (node->child == NULL)
 		{
 			bwtArray->push_back(node->startIndex);
+			if (node->sibling != NULL)
+				BWTHelper(node->sibling, bwtArray);
 			return;
 		}
 		else
