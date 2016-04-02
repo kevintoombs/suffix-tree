@@ -19,6 +19,7 @@ public:
 	Symbol *currentSymbol;
 	string aString;
 
+
 	bool DEBUG = 0;
 
 	Alphabet()
@@ -78,6 +79,7 @@ public:
 	string seq;
 	string header;
 
+
 	static string Sequence::parseFasta(char *fastaFile)
 	{
 		string out;
@@ -103,17 +105,25 @@ class Printer
 {
 public:
 	int time = clock();
-
+	int counter = 0;
 
 	void printToFile(string stringToPrint, std::string relativeFilename)
 	{
 		relativeFilename += ".";
 		relativeFilename += to_string(time);
-		relativeFilename += ".txt";
+		relativeFilename += ".out.txt";
 
 		ofstream outFile;
 		outFile.open(relativeFilename, ios::app);
 		outFile << stringToPrint;
+		
+		counter++;
+		if (counter == 20)
+		{
+			counter = 0;
+			outFile << "\n";
+		}
+		
 		outFile.close();
 	}
 };

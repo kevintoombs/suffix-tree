@@ -119,30 +119,23 @@ public:
 	void printDFST()
 	{
 		cout << endl;
-		DFSTHelper(root, 0);
+		DFSTHelper(root);
 		cout << endl;
 	}
 
-	void DFSTHelper(Node *node, int counter)
+	void DFSTHelper(Node *node)
 	{
 		if (node == NULL)
 		{
 			return;
 		}
-		
-		if (counter == 10)
-		{
-			printer.printToFile("\n", "DFST");
-			counter = 0;
-		} counter++;
-
 		int d = node->nodeNumber;
 		//cout << d << "-";
 		printer.printToFile(to_string(d), "DFST");
-		printer.printToFile("-", "DFST");
+		printer.printToFile(" | ", "DFST");
 
-		DFSTHelper(node->child,counter);
-		DFSTHelper(node->sibling,counter);
+		DFSTHelper(node->child);
+		DFSTHelper(node->sibling);
 	}
 
 	void findPath(Node *v, int t)

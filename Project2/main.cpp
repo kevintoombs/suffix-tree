@@ -1,5 +1,7 @@
 #include "suffixTree.cpp"
 
+bool FORCEPRINT = 1;
+
 int main(int argc, char *argv[])
 {
 	string inputString = Sequence::parseFasta(argv[1]); //input argument one should be a fasta input file
@@ -8,13 +10,14 @@ int main(int argc, char *argv[])
 	//Tree is constructed from the given alphabet and string.
 	unsigned int start = clock();
 	McSuffixTree mST(inputString, a);
-	cout << "The tree took: " << clock() - start << "ms to build" << endl << endl;
+	cout << "The tree took: " << clock() - start << "ms to build" << endl;
+	cout << endl;
 
 	cout << "TREE STATS" << endl;
 	cout << "Number of internal nodes: " << mST.nodes - mST.s.length() << endl; //cheating
 	cout << "Number of leaves: " << mST.s.length() << endl; //cheating
 	cout << "Number of total nodes: " << mST.nodes << endl;
-	cout << "Size of tree in bytes: " << sizeof(mST) << endl;
+	cout << "sizeof() tree in bytes: " << sizeof(mST) << endl;
 	cout << "average string depth of internal nodes" << "[[TODO]]" << endl;
 	cout << "string-depth of deepest eternal node" << "[[TODO]]" << endl;
 	cout << endl;
@@ -22,11 +25,21 @@ int main(int argc, char *argv[])
 	cout << "print some random children" << "[[TODO]]" << endl;
 	cout << endl;
 
-	
-	mST.printDFST();
-	cout << "DFST written to out file." << endl;
-	//mST.printBWT();
-	cout << "BWT written to out file" << "[[TODO]]" <<endl;
+	cout << "coords of longest matching repeat: " << "[[TODO]]" << endl;
+	cout << endl;
+
+	if (mST.s.length() < 100000 || FORCEPRINT)
+	{
+		mST.printDFST();
+		cout << "DFST written to out file." << endl;
+		//mST.printBWT();
+		cout << "BWT written to out file" << "[[TODO]]" << endl;
+	}
+	else
+	{
+		cout << "Input string is at least 100000 characters" << endl;
+		cout << "Not outputting DFTS or BWT" << endl;
+	}
 	cout << endl;
 
 	cout << "Press enter to exit." << endl;
