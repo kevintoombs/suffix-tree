@@ -372,7 +372,7 @@ public:
 
 			while (1)
 			{
-				if (prevChild == parent && s[stringStart - 1] == s[child->startIndex - 1])
+				if (prevChild == parent && s[stringStart - 1] < s[child->startIndex - 1])
 				{
 					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
 					parent->child = n;
@@ -380,7 +380,7 @@ public:
 					u = parent;
 					return;
 				}
-				else if (s[stringStart - 1] == s[child->startIndex - 1])
+				else if (s[stringStart - 1] < s[child->startIndex - 1])
 				{
 					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
 					n->sibling = child->sibling;
