@@ -1,5 +1,6 @@
 #include "includes.h"
 
+
 class Alphabet
 {
 public:
@@ -17,6 +18,8 @@ public:
 	Symbol *rootDelimiter;
 	Symbol *currentSymbol;
 	string aString;
+
+	bool DEBUG = 0;
 
 	Alphabet()
 	{

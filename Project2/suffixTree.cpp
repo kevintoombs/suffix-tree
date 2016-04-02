@@ -37,6 +37,8 @@ public:
 	string s;
 	Alphabet sigma;
 
+	bool DEBUG = 1;
+
 	McSuffixTree(string sIn, Alphabet aIn)
 	{
 		sigma = aIn;
@@ -64,28 +66,28 @@ public:
 	{
 		Node *child = u->child;
 		
-		cout << u->nodeDepth << ":";
+		if (DEBUG == 1) cout << u->nodeDepth << ":";
 		for (int i = 0; i < u->nodeDepth; i++)
 		{
-			cout << " ";
+			if (DEBUG == 1) cout << " ";
 		}
-		cout << "[";
+		if (DEBUG == 1) cout << "[";
 		while (child != NULL)
 		{
-			cout << "(" << child->startIndex << "," << child->stringSize;
+			if (DEBUG == 1) cout << "(" << child->startIndex << "," << child->stringSize;
 			if (child->nodeDepth != u->nodeDepth + 1)
 			{
-				cout << "{!!!" << child->nodeDepth << ": not correct node depth}";
+				if (DEBUG == 1) cout << "{!!!" << child->nodeDepth << ": not correct node depth}";
 			}
 
 			if (child->sL != NULL && false)
 			{
-				cout << "|!!!" << child->sL->startIndex << "," << child->sL->stringSize << "suffix link|";
+				if (DEBUG == 1) cout << "|!!!" << child->sL->startIndex << "," << child->sL->stringSize << "suffix link|";
 			}
-			cout << ")";
+			if (DEBUG == 1) cout << ")";
 			child = child->sibling;
 		}
-		cout << "]" << endl;
+		if (DEBUG == 1) cout << "]" << endl;
 
 		child = u->child;
 		while (child != NULL)
@@ -101,7 +103,7 @@ public:
 		Node *child = u->child;
 		while (child != NULL) 
 		{
-			cout << child->startIndex << "," << child->stringSize << endl;
+			if (DEBUG == 1) cout << child->startIndex << "," << child->stringSize << endl;
 			child = child->sibling;
 		}
 	}
@@ -147,7 +149,7 @@ public:
 				//otherwise break the edge that far down.
 				else
 				{
-					printf("===!!!!===break called with i = %i\n", i);
+					if (DEBUG == 1) printf("===!!!!===break called with i = %i\n", i);
 					findPath(edgeBreak(v, n, lastN, i), t + sumI + i);
 
 					return;
@@ -182,26 +184,26 @@ public:
 	void insertSuffix(int i)
 	{
 		//DEBUG
-		cout << "Inserting by index: " << s.substr(i-1) << endl;
+		if (DEBUG == 1) cout << "Inserting by index: " << s.substr(i-1) << endl;
 		//END DEBUG
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
 		{
-			cout << "case 1a called for suffix " << i << "." << endl;
+			if (DEBUG == 1) cout << "case 1a called for suffix " << i << "." << endl;
 			case1a(u, i);
 		}
 		else if (u->sL && (u == root)) //case1b (SL(u)) && (u == root)
 		{
-			cout << "case 1b called for suffix " << i << "." << endl;
+			if (DEBUG == 1) cout << "case 1b called for suffix " << i << "." << endl;
 			case1b(u, i);
 		}
 		else if (!(u->sL) && (u->parent != root)) //case2a !(SL(u)) && (u != root)
 		{
-			cout << "case 2a called for suffix " << i << "." << endl;
+			if (DEBUG == 1) cout << "case 2a called for suffix " << i << "." << endl;
 			case2a(u, i);
 		}
 		else if (!(u->sL) && (u->parent == root)) //case2b !(SL(u)) && (u == root)
 		{
-			cout << "case 2b called for suffix " << i << "." << endl;
+			if (DEBUG == 1) cout << "case 2b called for suffix " << i << "." << endl;
 			case2b(u, i);
 		}
 
@@ -257,7 +259,7 @@ public:
 		{
 			parent = child->parent;
 			prevSibling = NULL;
-			while (s[child->startIndex-1] != s[betaStart-1])
+			while (s[child->startIndex-1] != s[betaStart-1] )
 			{
 				prevSibling = child;
 				child = child->sibling;
@@ -299,7 +301,7 @@ public:
 	//called to insert a string under a node by adding a new terminal node.
 	void insertNode(Node *parent, int stringStart)
 	{
-		cout << "Making node for index " << stringStart << ".\n";
+		if (DEBUG == 1) cout << "Making node for index " << stringStart << ".\n";
 		
 		Node *child = parent->child;
 			
@@ -315,7 +317,7 @@ public:
 		{
 			while (child != NULL)
 			{
-				//cout << ".";
+				//if (DEBUG == 1) cout << ".";
 				//if we get a matching child
 				if (s[stringStart-1] == s[child->startIndex-1])
 				{
@@ -352,7 +354,7 @@ public:
 
 	Node* edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
 	{
-		printf("===!!!!===break called\n");
+		if (DEBUG == 1) cout << "===!!!!===break called\n";
 		Node* Ui = new Node(vChild->startIndex, correctComparisons, vChild->nodeDepth, v);
 		Ui->child = vChild;
 		//if vChild is not v's first child
@@ -370,13 +372,20 @@ public:
 			vChild->sibling = NULL;
 		}
 		//replaced child's node depth increases by 1
-		vChild->nodeDepth++;
+		increaseDepth(vChild);
 		vChild->stringSize -= correctComparisons;
 		//set previous child's start index to the last character of Ui + 1
 
 		vChild->startIndex = Ui->startIndex + Ui->stringSize;
 		//if (u->sL == NULL) u->sL = Ui;
 		return Ui;
+	}
+
+	void increaseDepth(Node* n)
+	{
+		n->nodeDepth++;
+		if (n->child != NULL) increaseDepth(n->child);
+		if (n->sibling != NULL) increaseDepth(n->sibling);
 	}
 
 	void BWT()
@@ -422,11 +431,11 @@ public:
 		//find longest internal node
 		ExactMatchLength = 0;
 		ExactMatchHelper(0, root);
-		cout << "----------------------" << endl;
-		cout << "Exact Matching Repeat:" << endl;
-		cout << "Length: " << ExactMatchLength << endl;
-		cout << "Starting Coordinates: " << LongestInternalNode->startIndex << " and " << abs(LongestInternalNode->child->stringSize - LongestInternalNode->child->sibling->stringSize) + LongestInternalNode->startIndex << endl;
-		cout << "----------------------" << endl;
+		if (DEBUG == 1) cout << "----------------------" << endl;
+		if (DEBUG == 1) cout << "Exact Matching Repeat:" << endl;
+		if (DEBUG == 1) cout << "Length: " << ExactMatchLength << endl;
+		if (DEBUG == 1) cout << "Starting Coordinates: " << LongestInternalNode->startIndex << " and " << abs(LongestInternalNode->child->stringSize - LongestInternalNode->child->sibling->stringSize) + LongestInternalNode->startIndex << endl;
+		if (DEBUG == 1) cout << "----------------------" << endl;
 	}
 
 	void ExactMatchHelper(int currentDepth, Node* node)

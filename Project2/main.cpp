@@ -4,13 +4,13 @@ int main(int argc, char *argv[])
 {
 
 	string inputString = Sequence::parseFasta(argv[1]);
-	cout << inputString << endl;
+	//cout << inputString << endl;
 
 	Alphabet a = Alphabet::parseAlphabet(argv[2], '$');
-	a.display();
+	//a.display();
 
 	McSuffixTree mST(inputString, a);
-	cout << mST.s << endl;
+	//cout << mST.s << endl;
 	mST.sigma.display();
 
 
