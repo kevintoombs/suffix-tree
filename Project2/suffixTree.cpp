@@ -313,7 +313,7 @@ public:
 		if (DEBUG == 1) cout << "Making node for index " << stringStart << ".\n";
 		
 		Node *child = parent->child;
-		Node *prevChild = NULL;
+		Node *prevChild = parent;
 			
 		//if parent has no children...
 		if (child == NULL)
@@ -326,6 +326,7 @@ public:
 		//otherwise loop through children
 		else
 		{
+			/*
 			while (child != NULL)
 			{
 				//if (DEBUG == 1) cout << ".";
@@ -366,6 +367,39 @@ public:
 						prevChild = child;
 						child = child->sibling;
 					}
+				}
+			}*/
+
+			while (1)
+			{
+				if (prevChild == parent && s[stringStart - 1] == s[child->startIndex - 1])
+				{
+					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+					parent->child = n;
+					n->sibling = child;
+					u = parent;
+					return;
+				}
+				else if (s[stringStart - 1] == s[child->startIndex - 1])
+				{
+					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+					n->sibling = child->sibling;
+					prevChild->sibling = n;
+					u = parent;
+					return;
+				}
+				else
+				{
+					prevChild = child;
+					child = child->sibling;
+				}
+
+				if (child == NULL)
+				{
+					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+					prevChild->sibling = n;
+					u = parent;
+					return;
 				}
 			}
 		}
