@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	McSuffixTree mST(inputString, a);
 	//cout << mST.s << endl;
 	mST.sigma.display();
-
+	mST.BWT();
 
 
 	cin.ignore();
