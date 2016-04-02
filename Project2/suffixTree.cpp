@@ -135,7 +135,7 @@ public:
 		{
 			
 			//if the first character of the child matches matches...
-			if (s[n->startIndex - 1] == s[t - 1])
+			if (s[n->startIndex - 1] == s[t - 1 + sumI])
 			{
 				//set matches to 1 
 				int i = 1;
@@ -152,6 +152,7 @@ public:
 					v = n;
 					//set it's first child to the child
 					n = v->child;
+					lastN = NULL;
 					//note how many matches have been made total.
 					sumI += i;
 				}
@@ -159,7 +160,8 @@ public:
 				else
 				{
 					if (DEBUG == 1) printf("===!!!!===break called with i = %i\n", i);
-					findPath(edgeBreak(v, n, lastN, i), t + sumI + i);
+					Node* temp = edgeBreak(v, n, lastN, i);
+					insertNode(temp, t + sumI + i);
 
 					return;
 				}
@@ -234,7 +236,7 @@ public:
 
 	//!(SL(u)) && (u' != root)
 	void case2a(Node *u, int i)
-	{
+ 	{
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
 		nodeHops(vPrime, u->startIndex, u->stringSize);
@@ -272,7 +274,6 @@ public:
 			{
 				prevSibling = child;
 				child = child->sibling;
-				
 			}
 
 			if (betaLength < (child->stringSize))
@@ -444,8 +445,11 @@ public:
 		Node* Ui = new Node(vChild->startIndex, correctComparisons, vChild->nodeDepth, v);
 		Ui->child = vChild;
 		//if vChild is not v's first child
-		if (vSibling != NULL)
-			vSibling->sibling = Ui;
+		if (vSibling != NULL) 
+		{ 
+			vSibling->sibling = Ui; 
+		}
+
 		//if vChild IS v's first child
 		else
 			v->child = Ui;
