@@ -6,10 +6,13 @@ public:
 	int stringSize = 0; //where the string ends when added to  startIndex [1.....n]
 	int nodeDepth = 0;
 
+	int nodeNumber = 0;
+
 	Node *parent = NULL;
 	Node *sL = NULL;
 	Node *child = NULL;
 	Node *sibling = NULL;
+
 	
 	Node() {};
 	Node(int sI, int sD, int nD)
@@ -18,12 +21,13 @@ public:
 		stringSize = sD;
 		nodeDepth = nD;
 	}
-	Node(int sI, int sS, int nD, Node *pP)
+	Node(int sI, int sS, int nD, Node *pP, int nN)
 	{
 		startIndex = sI;
 		stringSize = sS;
 		nodeDepth = nD;
 		parent = pP;
+		nodeNumber = nN;
 	}
 };
 
@@ -38,6 +42,7 @@ public:
 	Alphabet sigma;
 
 	bool DEBUG = 0;
+	int nodes = 0;
 
 	McSuffixTree(string sIn, Alphabet aIn)
 	{
@@ -111,14 +116,16 @@ public:
 	void printDFST()
 	{
 		DFSTHelper(root);
+		cout << endl;
 	}
 
 	void DFSTHelper(Node *node)
 	{
 		if (node == NULL)
 			return;
-
-		int d = deep(node);
+		
+		int d = node->nodeNumber;
+		//int d = deep(node);
 		cout << d << " | ";// << endl;
 		DFSTHelper(node->child);
 		DFSTHelper(node->sibling);
@@ -337,7 +344,7 @@ public:
 		//if parent has no children...
 		if (child == NULL)
 		{
-			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1, parent);
+			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1, parent, ++nodes);
 			u = parent;
 			//fixOrder(parent);
 			return;
@@ -393,7 +400,7 @@ public:
 			{
 				if (prevChild == parent && s[stringStart - 1] < s[child->startIndex - 1])
 				{
-					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent, ++nodes);
 					parent->child = n;
 					n->sibling = child;
 					u = parent;
@@ -401,7 +408,7 @@ public:
 				}
 				else if (s[stringStart - 1] < s[child->startIndex - 1])
 				{
-					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent, ++nodes);
 					n->sibling = child;
 					prevChild->sibling = n;
 					u = parent;
@@ -415,7 +422,7 @@ public:
 
 				if (child == NULL)
 				{
-					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+					Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent, ++nodes);
 					prevChild->sibling = n;
 					u = parent;
 					return;
@@ -460,7 +467,7 @@ public:
 	Node* edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
 	{
 		if (DEBUG == 1) cout << "===!!!!===break called\n";
-		Node* Ui = new Node(vChild->startIndex, correctComparisons, vChild->nodeDepth, v);
+		Node* Ui = new Node(vChild->startIndex, correctComparisons, vChild->nodeDepth, v, ++nodes);
 		Ui->child = vChild;
 		//if vChild is not v's first child
 		if (vSibling != NULL) 

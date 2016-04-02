@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	//mST.BWT();
 
 
-	//mST.printDFST();
+	mST.printDFST();
 
 	//cout << mST.s << endl;
 	//mST.sigma.display();
