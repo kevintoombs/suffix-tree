@@ -32,6 +32,8 @@ class McSuffixTree
 public:
 	Node *root;
 	Node *u;
+	Node *LongestInternalNode;
+	int ExactMatchLength;
 	string s;
 	Alphabet sigma;
 
@@ -352,8 +354,24 @@ public:
 
 	void BWT()
 	{
-
+		vector<int> bwtArray;
+		BWTHelper(root, &bwtArray);
+		vector<char> bwtResult;
+		unsigned int i;
+		for (i = 0; i < bwtArray.size(); i++)
+		{
+			if (bwtArray[i] == 1)
+				bwtResult.push_back('$');
+			else
+				bwtResult.push_back(s[bwtArray[i]]);
+		}
+		ofstream outfile;
+		outfile.open("outfile.txt");
+		for (i = 0; i < bwtResult.size(); i++)
+			outfile << bwtResult[i] << endl;
+		outfile.close();
 	}
+
 	void BWTHelper(Node* node, vector<int>* bwtArray)
 	{
 		if (node == NULL)
@@ -370,6 +388,34 @@ public:
 		if (node->sibling != NULL)
 			BWTHelper(node->sibling, bwtArray);
 		return;
-		
+	}
+
+	void ExactMatchingRepeat()
+	{
+		//find longest internal node
+		ExactMatchLength = 0;
+		ExactMatchHelper(0, root);
+		cout << "----------------------" << endl;
+		cout << "Exact Matching Repeat:" << endl;
+		cout << "Length: " << ExactMatchLength << endl;
+		cout << "Starting Coordinates: " << LongestInternalNode->startIndex << " and " << abs(LongestInternalNode->child->stringSize - LongestInternalNode->child->sibling->stringSize) + LongestInternalNode->startIndex << endl;
+		cout << "----------------------" << endl;
+	}
+
+	void ExactMatchHelper(int currentDepth, Node* node)
+	{
+		if (node == NULL)
+			return;
+		if (node->child == NULL)
+			return;
+		currentDepth += node->stringSize;
+		if (currentDepth > ExactMatchLength)
+		{
+			ExactMatchLength = currentDepth;
+			LongestInternalNode = node;
+		}
+		ExactMatchHelper(currentDepth, node->child);
+		ExactMatchHelper(currentDepth - node->stringSize, node->sibling);
+		return;
 	}
 };
