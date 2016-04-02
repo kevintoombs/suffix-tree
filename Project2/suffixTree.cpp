@@ -62,10 +62,25 @@ public:
 	{
 		Node *child = u->child;
 		
+		cout << u->nodeDepth << ":";
+		for (int i = 0; i < u->nodeDepth; i++)
+		{
+			cout << " ";
+		}
 		cout << "[";
 		while (child != NULL)
 		{
-			cout << "(" << child->startIndex << "," << child->stringSize << ")";
+			cout << "(" << child->startIndex << "," << child->stringSize;
+			if (child->nodeDepth != u->nodeDepth + 1)
+			{
+				cout << "{!!!" << child->nodeDepth << ": not correct node depth}";
+			}
+
+			if (child->sL != NULL && false)
+			{
+				cout << "|!!!" << child->sL->startIndex << "," << child->sL->stringSize << "suffix link|";
+			}
+			cout << ")";
 			child = child->sibling;
 		}
 		cout << "]" << endl;
@@ -96,27 +111,38 @@ public:
 
 	void findPath(Node *v, int t)
 	{
+		//check the children of n
 		Node *n = v->child;
 		Node *lastN = NULL;
 
+		
 		int sumI = 0;
-
+		//if n has any children or hasn't run out of possiblities
 		while (n != NULL)
 		{
+			
+			//if the first character of the child matches matches...
 			if (s[n->startIndex - 1] == s[t - 1])
 			{
+				//set matches to 1 
 				int i = 1;
+				//check for more matches
 				while ((s[n->startIndex - 1 + i] == s[t - 1 + i]) && (i < n->stringSize - n->startIndex))
 				{
 					i++;
 				}
 
+				//if all characters matched
 				if (i == n->stringSize)
 				{
+					//set this child to the new parent
 					v = n;
+					//set it's first child to the child
 					n = v->child;
+					//note how many matches have been made total.
 					sumI += i;
 				}
+				//otherwise break the edge that far down.
 				else
 				{
 					printf("===!!!!===break called with i = %i\n", i);
@@ -125,6 +151,7 @@ public:
 					return;
 				}
 			}
+			//if not go to the next child
 			else
 			{
 				lastN = n;
@@ -134,7 +161,7 @@ public:
 		
 		//if there is no matching child, insert one!
 		//or lets use this no matter what
-		insertNode(v, t);
+		insertNode(v, t+sumI);
 	}
 
 	string pathLabel(Node u)
@@ -197,7 +224,7 @@ public:
 	{
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
-		nodeHops(vPrime, u->startIndex+1, u->stringSize-1);
+		nodeHops(vPrime, u->startIndex, u->stringSize);
 		Node *v = u->sL;
 		findPath(v, i + u->stringSize);
 	}
@@ -207,7 +234,7 @@ public:
 	{
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
-		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);
+		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);	
 		Node *v = u->sL;
 		findPath(v, i+u->stringSize-1);
 	}
@@ -216,7 +243,7 @@ public:
 	{
 		if (betaLength == 0)
 		{
-			u->sL = root;
+			u->sL = vPrime;
 			return;
 		}
 		Node* child = vPrime->child;
