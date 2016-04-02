@@ -40,6 +40,7 @@ public:
 	int ExactMatchLength;
 	string s;
 	Alphabet sigma;
+	Printer printer;
 
 	bool DEBUG = 0;
 	int nodes = 0;
@@ -48,6 +49,8 @@ public:
 	{
 		sigma = aIn;
 		s = sIn + sigma.rootDelimiter->sym;
+
+		printer = Printer();
 
 		init();
 	}
@@ -115,20 +118,31 @@ public:
 	
 	void printDFST()
 	{
-		DFSTHelper(root);
+		cout << endl;
+		DFSTHelper(root, 0);
 		cout << endl;
 	}
 
-	void DFSTHelper(Node *node)
+	void DFSTHelper(Node *node, int counter)
 	{
 		if (node == NULL)
+		{
 			return;
+		}
 		
+		if (counter == 10)
+		{
+			printer.printToFile("\n", "DFST");
+			counter = 0;
+		} counter++;
+
 		int d = node->nodeNumber;
-		//int d = deep(node);
-		cout << d << " | ";// << endl;
-		DFSTHelper(node->child);
-		DFSTHelper(node->sibling);
+		//cout << d << "-";
+		printer.printToFile(to_string(d), "DFST");
+		printer.printToFile("-", "DFST");
+
+		DFSTHelper(node->child,counter);
+		DFSTHelper(node->sibling,counter);
 	}
 
 	void findPath(Node *v, int t)
@@ -248,23 +262,23 @@ public:
 	//!(SL(u)) && (u' != root)
 	void case2a(Node *u, int i)
  	{
-		int preBreakStringSize = deep(u);
+		int sizeOfAlphaAndC = deep(u);
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
 		nodeHops(vPrime, u->startIndex, u->stringSize);
 		Node *v = u->sL;
-		findPath(v, i + preBreakStringSize -1 );
+		findPath(v, i + sizeOfAlphaAndC -1 );
 	}
 
 	//!(SL(u)) && (u' == root)
 	void case2b(Node *u, int i)
 	{
-		int preBreakStringSize = u->stringSize;
+		int sizeOfBeta = u->stringSize;
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
 		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);	
 		Node *v = u->sL;
-		findPath(v, i+preBreakStringSize-1);
+		findPath(v, i+sizeOfBeta-1);
 	}
 
 	int deep(Node* n)
@@ -560,11 +574,11 @@ public:
 		//find longest internal node
 		ExactMatchLength = 0;
 		ExactMatchHelper(0, root);
-		if (DEBUG == 1) cout << "----------------------" << endl;
-		if (DEBUG == 1) cout << "Exact Matching Repeat:" << endl;
-		if (DEBUG == 1) cout << "Length: " << ExactMatchLength << endl;
-		if (DEBUG == 1) cout << "Starting Coordinates: " << LongestInternalNode->startIndex << " and " << abs(LongestInternalNode->child->stringSize - LongestInternalNode->child->sibling->stringSize) + LongestInternalNode->startIndex << endl;
-		if (DEBUG == 1) cout << "----------------------" << endl;
+		cout << "----------------------" << endl;
+		cout << "Exact Matching Repeat:" << endl;
+		cout << "Length: " << ExactMatchLength << endl;
+		cout << "Starting Coordinates: " << LongestInternalNode->startIndex << " and " << abs(LongestInternalNode->child->stringSize - LongestInternalNode->child->sibling->stringSize) + LongestInternalNode->startIndex << endl;
+		cout << "----------------------" << endl;
 	}
 
 	void ExactMatchHelper(int currentDepth, Node* node)

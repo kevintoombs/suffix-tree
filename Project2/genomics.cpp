@@ -99,4 +99,21 @@ public:
 	}
 };
 
+class Printer
+{
+public:
+	int time = clock();
 
+
+	void printToFile(string stringToPrint, std::string relativeFilename)
+	{
+		relativeFilename += ".";
+		relativeFilename += to_string(time);
+		relativeFilename += ".txt";
+
+		ofstream outFile;
+		outFile.open(relativeFilename, ios::app);
+		outFile << stringToPrint;
+		outFile.close();
+	}
+};
