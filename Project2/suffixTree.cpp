@@ -57,7 +57,7 @@ public:
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
 			insertSuffix(i);
-			displayAllChildren(root);
+			//displayAllChildren(root);
 			__noop;
 		}
 	}
@@ -108,16 +108,18 @@ public:
 		}
 	}
 	
-	void printDFST(Node *node)
+	void printDFST()
 	{
-		DFSTHelper(node);
+		DFSTHelper(root);
 	}
 
 	void DFSTHelper(Node *node)
 	{
 		if (node == NULL)
 			return;
-		cout << node->startIndex + node->stringSize << endl;
+
+		int d = deep(node);
+		cout << d << " | ";// << endl;
 		DFSTHelper(node->child);
 		DFSTHelper(node->sibling);
 	}
@@ -176,8 +178,8 @@ public:
 		}
 		
 		//if there is no matching child, insert one!
-		//or lets use this no matter what
 		insertNode(v, t+sumI);
+		return;
 	}
 
 	string pathLabel(Node u)
@@ -196,8 +198,8 @@ public:
 	void insertSuffix(int i)
 	{
 		//DEBUG
-		if (DEBUG == 0) cout << i << "/" << s.length() << endl;
-		if (DEBUG == 1) cout << "Inserting by index: " << s.substr(i-1) << endl;
+ 		//if (DEBUG == 0) cout << i << "/" << s.length() << endl;
+ 		if (DEBUG == 1) cout << "Inserting by index: " << s.substr(i-1) << endl;
 		//END DEBUG
 		if (u->sL && (u != root)) //case1a (SL(u)) && (u != root) 
 		{
@@ -239,12 +241,23 @@ public:
 	//!(SL(u)) && (u' != root)
 	void case2a(Node *u, int i)
  	{
-		int preBreakStringSize = u->stringSize;
+		int preBreakStringSize = deep(u);
 		Node *uPrime = u->parent;
 		Node *vPrime = uPrime->sL;
 		nodeHops(vPrime, u->startIndex, u->stringSize);
 		Node *v = u->sL;
-		findPath(v, i + preBreakStringSize);
+		findPath(v, i + preBreakStringSize -1 );
+	}
+
+	//!(SL(u)) && (u' == root)
+	void case2b(Node *u, int i)
+	{
+		int preBreakStringSize = u->stringSize;
+		Node *uPrime = u->parent;
+		Node *vPrime = uPrime->sL;
+		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);	
+		Node *v = u->sL;
+		findPath(v, i+preBreakStringSize-1);
 	}
 
 	int deep(Node* n)
@@ -257,17 +270,6 @@ public:
 		}
 
 		return i;
-	}
-
-	//!(SL(u)) && (u' == root)
-	void case2b(Node *u, int i)
-	{
-		int preBreakStringSize = u->stringSize;
-		Node *uPrime = u->parent;
-		Node *vPrime = uPrime->sL;
-		nodeHops(vPrime,  u->startIndex+1, u->stringSize-1);	
-		Node *v = u->sL;
-		findPath(v, i+preBreakStringSize-1);
 	}
 
 	void nodeHops(Node* vPrime, int betaStart, int betaLength)
