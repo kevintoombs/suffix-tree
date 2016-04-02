@@ -310,6 +310,7 @@ public:
 		{
 			parent->child = new Node(stringStart, s.length()-stringStart+1, parent->nodeDepth + 1, parent);
 			u = parent;
+			//fixOrder(parent);
 			return;
 		}
 		//otherwise loop through children
@@ -326,11 +327,29 @@ public:
 				}
 				else
 				{
-					if (child->sibling == NULL)
+					if (child->sibling == NULL )
 					{
 						child->sibling = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
 						u = parent;
+						//fixOrder(parent);
 						return;
+					}
+					else if (s[stringStart - 1] < s[child->startIndex - 1])
+					{
+						if (child == parent->child)
+						{
+							Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+							parent->child = n;
+							n->sibling = child;
+							u = parent;
+							return;
+						}
+						else
+						{
+							Node* n = new Node(stringStart, s.length() - stringStart + 1, parent->nodeDepth + 1, parent);
+							n->sibling = child->sibling;
+
+						}
 					}
 					else
 					{
@@ -350,6 +369,28 @@ public:
 		//this is always the final function call, now we set the next u and repeat.
 		exit(1);
 		return;
+	}
+
+	void fixOrder(Node* parent)
+	{
+		Node* moveMeDown = parent->child;
+		while (moveMeDown != NULL)
+		{
+			Node* next = moveMeDown->sibling;
+			while (next != NULL)
+			{
+				if (s[moveMeDown->startIndex - 1] > s[next->startIndex - 1])
+				{
+					std::swap(moveMeDown, next);
+					next = moveMeDown->sibling;
+				}
+				else
+				{
+					next = next->sibling;
+				}
+			}
+			moveMeDown = moveMeDown->sibling;
+		}
 	}
 
 	Node* edgeBreak(Node* v, Node* vChild, Node* vSibling, int correctComparisons)
