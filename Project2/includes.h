@@ -8,5 +8,7 @@
 #include <vector>
 #include <sstream>
 #include <ctime>
+#include <stdlib.h> 
+#include <time.h> 
 
 using namespace std;

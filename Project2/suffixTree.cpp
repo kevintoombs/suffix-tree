@@ -563,12 +563,12 @@ public:
 		
 		vector<char> bwtResult;
 		unsigned int i;
-		cout << "[";
+		if (DEBUG == 1) cout << "[";
 		for (i = 0; i < bwtArray.size(); i++)
 		{
-			cout << bwtArray[i] << ", ";
+			if (DEBUG == 1) cout << bwtArray[i] << ", ";
 		}
-		cout << "]" << endl;
+		if (DEBUG == 1) cout << "]" << endl;
 		for (i = 0; i < bwtArray.size(); i++)
 		{
 			if (bwtArray[i] == 1)

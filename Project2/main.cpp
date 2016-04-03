@@ -18,24 +18,32 @@ int main(int argc, char *argv[])
 	cout << "Number of leaves: " << mST.s.length() << endl; //cheating
 	cout << "Number of total nodes: " << mST.nodes << endl;
 	cout << "sizeof() tree in bytes: " << sizeof(mST) << endl;
-	cout << "average string depth of internal nodes" << "[[TODO]]" << endl;
-	cout << "string-depth of deepest eternal node" << "[[TODO]]" << endl;
 	cout << endl;
 
-	cout << "print some random children" << "[[TODO]]" << endl;
+	srand(time(NULL));
+	cout << "print some random children:" << "[[TODO]]" << endl;
+	for (int i = 1; i < 5; i++)
+	{
+		int randN = rand() % inputString.length() + 1;
+
+	}
 	cout << endl;
 
 	mST.findLCS();
 	cout << "longest matching repeat: " << mST.printString(mST.LCS) << endl;
+	
 	cout << endl;
 	cout << "coords of longest matching repeat: " << mST.index1 << "," << mST.index2 << endl;
+	cout << "string-depth of deepest eternal node: " << mST.LCSdepth << endl;
+	cout << "average string depth of internal nodes:" << "[[TODO]]" << endl;
 	cout << endl;
+
 
 	if (mST.s.length() < 100000 || FORCEPRINT)
 	{
 		//mST.printDFST();
-		cout << "DFST written to out file." << endl;
-		//mST.printBWT();
+		//cout << "DFST written to out file." << endl;
+		mST.BWT();
 		cout << "BWT written to out file" << "[[TODO]]" << endl;
 	}
 	else
