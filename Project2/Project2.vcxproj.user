@@ -13,7 +13,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>$(ProjectDir)refs\3\s3.fasta $(ProjectDir)refs\3\dna_alphabet.txt</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>$(ProjectDir)refs\3\Human-BRCA2-cds.fasta $(ProjectDir)refs\3\dna_alphabet.txt</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
