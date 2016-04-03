@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	mST.findLCS();
 	cout << "longest matching repeat: " << mST.printString(mST.LCS) << endl;
 	cout << endl;
-	cout << "coords of longest matching repeat: " << "[[TODO]]" << endl;
+	cout << "coords of longest matching repeat: " << mST.index1 << "," << mST.index2 << endl;
 	cout << endl;
 
 	if (mST.s.length() < 100000 || FORCEPRINT)

@@ -43,11 +43,13 @@ public:
 	Alphabet sigma;
 	Printer printer;
 
-	bool DEBUG = 1;
+	bool DEBUG = 0;
 	int nodes = 0;
 
 	Node* LCS;
 	int LCSdepth;
+	int index1;
+	int index2;
 
 	McSuffixTree(string sIn, Alphabet aIn)
 	{
@@ -69,7 +71,7 @@ public:
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
 			insertSuffix(i);
-			displayAllChildren(root);
+			//displayAllChildren(root);
 			__noop;
 		}
 	}
@@ -160,6 +162,8 @@ public:
 			{
 				if (DEBUG == 1) cout << "New LCS node: (" << node->startIndex << "," << node->stringSize << ")." << endl;
 				LCSdepth = depth;
+				index1 = node->child->startIndex			-depth;
+				index2 = node->child->sibling->startIndex	-depth;
 				LCS = node;
 			}
 		}
