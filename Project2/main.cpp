@@ -25,12 +25,15 @@ int main(int argc, char *argv[])
 	cout << "print some random children" << "[[TODO]]" << endl;
 	cout << endl;
 
+	mST.findLCS();
+	cout << "longest matching repeat: " << mST.printString(mST.LCS) << endl;
+	cout << endl;
 	cout << "coords of longest matching repeat: " << "[[TODO]]" << endl;
 	cout << endl;
 
 	if (mST.s.length() < 100000 || FORCEPRINT)
 	{
-		mST.printDFST();
+		//mST.printDFST();
 		cout << "DFST written to out file." << endl;
 		//mST.printBWT();
 		cout << "BWT written to out file" << "[[TODO]]" << endl;

@@ -13,6 +13,7 @@ public:
 	Node *child = NULL;
 	Node *sibling = NULL;
 
+
 	
 	Node() {};
 	Node(int sI, int sD, int nD)
@@ -42,8 +43,11 @@ public:
 	Alphabet sigma;
 	Printer printer;
 
-	bool DEBUG = 0;
+	bool DEBUG = 1;
 	int nodes = 0;
+
+	Node* LCS;
+	int LCSdepth;
 
 	McSuffixTree(string sIn, Alphabet aIn)
 	{
@@ -65,7 +69,7 @@ public:
 		for (unsigned int i = 1; i <= s.length(); i++)
 		{
 			insertSuffix(i);
-			//displayAllChildren(root);
+			displayAllChildren(root);
 			__noop;
 		}
 	}
@@ -118,9 +122,7 @@ public:
 	
 	void printDFST()
 	{
-		cout << endl;
 		DFSTHelper(root);
-		cout << endl;
 	}
 
 	void DFSTHelper(Node *node)
@@ -136,6 +138,33 @@ public:
 
 		DFSTHelper(node->child);
 		DFSTHelper(node->sibling);
+	}
+
+	void findLCS()
+	{
+		LCS = root;
+		LCSdepth = deep(root);
+		findLCSHelper(root);
+	}
+
+	void findLCSHelper(Node *node)
+	{
+		if (node == NULL)
+		{
+			return;
+		}
+		else if (node->child != NULL)
+		{
+			int depth = deep(node);
+			if (depth > LCSdepth)
+			{
+				if (DEBUG == 1) cout << "New LCS node: (" << node->startIndex << "," << node->stringSize << ")." << endl;
+				LCSdepth = depth;
+				LCS = node;
+			}
+		}
+		findLCSHelper(node->child);
+		findLCSHelper(node->sibling);
 	}
 
 	void findPath(Node *v, int t)
@@ -196,17 +225,30 @@ public:
 		return;
 	}
 
-	string pathLabel(Node u)
+	string printString(Node* n)
 	{
-		Node* temp;
-		temp = u.parent;
-		while (temp->parent != root)
+			return printStringHelper(n);
+	}
+
+	string printStringHelper(Node* n)
+	{
+		if (n == root)
 		{
-			temp = temp->parent;
-		}
-		if (&u == root)
 			return "";
-		return s.substr(temp->startIndex, u.startIndex);
+		}
+		while (n != NULL && n->parent != NULL)
+		{
+			string s = pathLabel(n->parent);
+			return s + pathLabel(n);
+		}
+	}
+	string pathLabel(Node *u)
+	{
+		if (u == root)
+		{
+			return "";
+		}
+		return s.substr(u->startIndex-1, u->stringSize);
 	}
 
 	void insertSuffix(int i)
