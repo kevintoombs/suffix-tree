@@ -1,6 +1,6 @@
 #include "suffixTree.cpp"
 
-bool FORCEPRINT = 1;
+bool FORCEPRINT = 0;
 
 int main(int argc, char *argv[])
 {
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 		cout << "Not outputting DFTS or BWT" << endl;
 	}
 	cout << endl;
-
+	mST.BWT();
 	cout << "Press enter to exit." << endl;
 	cin.ignore();
 	return 0;

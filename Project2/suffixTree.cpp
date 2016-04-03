@@ -1,4 +1,6 @@
 #include "genomics.cpp"
+#include <algorithm>
+#include <map>
 
 class Node {
 public:
@@ -560,9 +562,19 @@ public:
 	{
 		vector<int> bwtArray;
 		BWTHelper(root, &bwtArray);
-		
+		map<int, int> lookup;
+		vector<int> sortedArray = bwtArray;
+		sort(sortedArray.begin(), sortedArray.end());
 		vector<char> bwtResult;
 		unsigned int i;
+		for (i = 0; i < sortedArray.size(); i++)
+		{
+			lookup.insert(pair<int, int>(sortedArray[i], i+1));
+		}
+		for (i = 0; i < sortedArray.size(); i++)
+		{
+			bwtArray[i] = lookup[bwtArray[i]];
+		}
 		if (DEBUG == 1) cout << "[";
 		for (i = 0; i < bwtArray.size(); i++)
 		{
@@ -589,14 +601,7 @@ public:
 			return;
 		if (node->child == NULL)
 		{
-			int size = node->parent->stringSize + node->stringSize - 1;
-			Node* temp = node;
-			while (temp->parent->stringSize != 0)
-			{
-				temp = temp->parent;
-				size += temp->parent->stringSize;
-			}
-			bwtArray->push_back(7 - size);
+			bwtArray->push_back(node->nodeNumber);
 			BWTHelper(node->sibling, bwtArray);
 			return;
 		}
