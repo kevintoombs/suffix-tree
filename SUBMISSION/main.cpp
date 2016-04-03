@@ -1,6 +1,6 @@
 #include "suffixTree.cpp"
 
-bool FORCEPRINT = 1;
+bool FORCEPRINT = 0;
 
 int main(int argc, char *argv[])
 {
@@ -41,10 +41,10 @@ int main(int argc, char *argv[])
 
 	if (mST.s.length() < 100000 || FORCEPRINT)
 	{
-		//mST.printDFST();
-		//cout << "DFST written to out file." << endl;
+		mST.printDFST();
+		cout << "DFST written to out file." << endl;
 		mST.BWT();
-		cout << "BWT written to out file" << "[[TODO]]" << endl;
+		cout << "BWT written to out file" << endl;
 	}
 	else
 	{
